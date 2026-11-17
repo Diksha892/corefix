@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Resolution Heatmap{% endblock %}
+{% block content %}
+<h1 class="page-h">Interactive resolution heatmap</h1>
+<p class="muted">Darker, redder tiles mean more reports at that location. Click a tile for details. A ↻ marks a recurring problem area (3+ reports).</p>
+<div class="card filters">
+  <div class="seg" id="modeSeg">
+    <label><input type="radio" name="mode" value="open" checked><span>Open issues</span></label>
+    <label><input type="radio" name="mode" value="all"><span>All issues</span></label>
+  </div>
+  <select id="catFilter"><option value="">All categories</option>{% for c in CATEGORIES %}<option>{{ c }}</option>{% endfor %}</select>
+  <div class="legend"><span>Low</span><i></i><span>High</span></div>
+</div>
+<div id="zones"></div>
+<div class="two-col">
+  <section class="card" id="detail"><h3>Location details</h3><p class="muted">Select a tile to see its issues.</p></section>
+  <section class="card"><h3>Hotspot ranking</h3><ol id="rank" class="rank"></ol></section>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='app.js') }}"></script>
+<script>initHeatmap();</script>{% endblock %}

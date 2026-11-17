@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#09111f">
+<meta name="description" content="Corefix — intelligent facility operations, issue reporting and resolution tracking.">
+<title>{% block title %}Corefix{% endblock %} · Corefix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="scroll-progress" aria-hidden="true"><i id="scrollProgress"></i></div>
+<div class="ambient ambient-one"></div><div class="ambient ambient-two"></div><div class="ambient ambient-three"></div>
+<div class="pointer-glow" aria-hidden="true"></div>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="{{ url_for('index') }}"><span class="logo"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M23.8 8.5a10.5 10.5 0 1 0 0 15M22 16H11m0 0 4-4m-4 4 4 4"/></svg></span><span>corefix<span class="brand-dot">.</span><small>FACILITY INTELLIGENCE</small></span></a>
+  <button class="command-trigger" type="button" data-command-open aria-label="Open quick actions"><span>⌕</span><kbd>Ctrl K</kbd></button>
+  <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" onclick="document.querySelector('.nav-links').classList.toggle('open');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')!=='true')">☰</button>
+  <nav class="nav-links"><a href="{{ url_for('index') }}" class="nav-home">Overview</a><a href="{{ url_for('report') }}">Report issue</a><a href="{{ url_for('track') }}">Track request</a><a href="{{ url_for('heatmap') }}">Live heatmap</a>
+  {% if is_admin %}<a href="{{ url_for('dashboard') }}">Operations</a><form method="post" action="{{ url_for('logout') }}" class="inline"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button class="nav-login">Log out ↗</button></form>{% else %}<a href="{{ url_for('login') }}" class="nav-login">Admin portal <span>↗</span></a>{% endif %}</nav>
+</div></header>
+<main class="wrap">
+{% with msgs = get_flashed_messages(with_categories=true) %}{% for cat,m in msgs %}<div class="flash {{ cat }}">{{ m }}</div>{% endfor %}{% endwith %}
+{% block content %}{% endblock %}
+</main>
+<footer class="site-footer"><div class="wrap footer-in"><a class="brand footer-brand" href="{{ url_for('index') }}"><span class="logo">C</span><span>corefix<span class="brand-dot">.</span></span></a><span>One connected view of every facility.</span><span>© 2026 Corefix · Built for better spaces</span></div></footer>
+{% block scripts %}{% endblock %}
+<!-- Corefix Copilot: guided, on-site assistance (no external AI service required) -->
+<button class="copilot-launcher" id="copilotLauncher" type="button" aria-label="Open Corefix Copilot" aria-expanded="false"><span class="copilot-launcher-orb">✳</span><span class="copilot-launcher-copy"><b>Corefix Copilot</b><small>Here when you need a hand</small></span><span class="copilot-launcher-pulse"></span></button>
+<section class="copilot-panel" id="copilotPanel" aria-label="Corefix Copilot" hidden>
+  <header class="copilot-head"><div class="copilot-avatar">✳</div><div><b>Corefix Copilot</b><small><i></i> Guided assistance · Online</small></div><button type="button" id="copilotClose" aria-label="Close assistant">×</button></header>
+  <div class="copilot-conversation" id="copilotConversation"><div class="copilot-message bot"><span class="message-mark">✳</span><div><b>Hey there.</b><p>I can help you report a facility issue, find a ticket, understand priority levels or explore the facility map. What do you need?</p></div></div><div class="copilot-suggestions"><button type="button" data-copilot="report">＋ Report an issue</button><button type="button" data-copilot="track">⌕ Track my request</button><button type="button" data-copilot="priority">◈ Understand priority</button><button type="button" data-copilot="map">⌖ Explore locations</button></div></div>
+  <form class="copilot-input" id="copilotForm"><input id="copilotQuestion" autocomplete="off" placeholder="Ask Corefix something…" aria-label="Ask Corefix"><button type="submit" aria-label="Send message">↗</button></form><div class="copilot-foot">Guided help based on the Corefix service desk</div>
+</section>
+<div class="command-overlay" id="commandOverlay" hidden><div class="command-box"><div class="command-search"><span>⌕</span><input id="commandInput" placeholder="Jump to anything…" autocomplete="off"><kbd>ESC</kbd></div><div class="command-label">QUICK ACTIONS</div><button data-command="report"><span>＋</span><span><b>Report an issue</b><small>Create a new service request</small></span><kbd>↵</kbd></button><button data-command="track"><span>⌕</span><span><b>Track a complaint</b><small>Find a request by ticket ID</small></span><kbd>↵</kbd></button><button data-command="heatmap"><span>⌖</span><span><b>Facility heatmap</b><small>Explore issue hotspots</small></span><kbd>↵</kbd></button><button data-command="dashboard"><span>▦</span><span><b>Operations dashboard</b><small>Review service desk activity</small></span><kbd>↵</kbd></button><div class="command-hint">Navigate faster with Corefix quick actions</div></div></div>
+<script src="{{ url_for('static', filename='experience.js') }}"></script>
+<script>document.querySelectorAll('.card,.stat,.feature-card,.hero-copy').forEach((el,i)=>{el.style.setProperty('--delay',`${Math.min(i*55,330)}ms`);el.classList.add('reveal')});const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(e=>io.observe(e));</script>
+</body></html>
